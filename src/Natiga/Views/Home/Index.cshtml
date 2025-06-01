@@ -1,8 +1,26 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "نتيجة امتحان العام الدراسى 2024/2025";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">نتيجة امتحان الفصل الدراسى الثانى 2024/2025</h1>
 </div>
+
+<form>
+    <div class="row row-cols-1 mt-3">
+        <div class="col">
+            <div class="form-floating">
+                <input type="text" id="seat-no" name="seat-no" class="form-control" placeholder=""/>
+                <label for="seat-no" class="control-label">أدخل رقم الجلوس</label>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row row-cols-1 mt-3">
+        <div class="col">
+            <div class="form-floating">
+                <input type="submit" class="btn btn-success w-100" value="بحث" />
+            </div>
+        </div>
+    </div>
+</form>
