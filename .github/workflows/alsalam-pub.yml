@@ -1,0 +1,85 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Al-Salam Test website build
+
+on:
+  push:
+   branches: [ "main" ]
+  #pull_request:
+   #branches: [ "master" ]
+  workflow_dispatch:
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      ASPNETCORE_ENVIRONMENT: Production
+      
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET 9
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 9.0.x
+    
+    - name: Restore dependencies      
+      run: dotnet restore      
+      working-directory: src/Natiga
+    
+    - name: Build      
+      run: dotnet build --no-restore
+      working-directory: src/Natiga
+    
+    - name: Publish files
+      run: dotnet publish -c Release
+      working-directory: src/Natiga
+    
+    - name: Stop site service
+      uses: garygrossgarten/github-action-ssh@v0.6.3
+      with:
+        command: sudo systemctl stop alsalam.service
+        host: ${{secrets.AS_REMOTE_HOST}}
+        username: ${{ secrets.AS_REMOTE_USER }}
+        #passphrase: ${{ secrets.PASSPHRASE }}
+        privateKey: ${{ secrets.AS_REMOTE_SSH_KEY }}
+    
+    - name: Upload files to temp directory via rsync
+      uses: Burnett01/rsync-deployments@6.0.0
+      with:
+          switches: -auvzrP
+          path: /src/Natiga/bin/Release/net9.0/publish/
+          remote_path: /tmp/alsalam-deploy/
+          remote_host: ${{ secrets.AS_REMOTE_HOST }}
+          remote_port: 22
+          remote_user: ${{ secrets.AS_REMOTE_USER }}
+          #remote_key_pass: ${{ secrets.PASSPHRASE }}
+          remote_key: ${{ secrets.AS_REMOTE_SSH_KEY }}
+          
+    - name: Move files to production with sudo
+      uses: garygrossgarten/github-action-ssh@v0.6.3
+      with:
+        command: sudo rsync -auvzrP /tmp/alsalam-deploy/ /www/wwwroot/ahmedsuror/alsalam.ahmedsuror.com && sudo rm -rf /tmp/alsalam-deploy
+        host: ${{secrets.AS_REMOTE_HOST}}
+        username: ${{ secrets.AS_REMOTE_USER }}
+        #passphrase: ${{ secrets.PASSPHRASE }}
+        privateKey: ${{ secrets.AS_REMOTE_SSH_KEY }}
+    
+    - name: Take files and folders ownership for (www)
+      uses: garygrossgarten/github-action-ssh@v0.6.3
+      with:
+        command: cd /www/wwwroot/ahmedsuror/alsalam.ahmedsuror.com && sudo chown -R www:www *
+        host: ${{secrets.AS_REMOTE_HOST}}
+        username: ${{ secrets.AS_REMOTE_USER }}
+        #passphrase: ${{ secrets.PASSPHRASE }}
+        privateKey: ${{ secrets.AS_REMOTE_SSH_KEY }}
+        
+    - name: Start oracrm Service
+      uses: garygrossgarten/github-action-ssh@v0.6.3
+      with:
+            command: sudo systemctl start alsalam.service
+            host: ${{ secrets.AS_REMOTE_HOST }}
+            username: ${{ secrets.AS_REMOTE_USER }}
+            #passphrase: ${{ secrets.PASSPHRASE }}
+            privateKey: ${{ secrets.AS_REMOTE_SSH_KEY }}        
