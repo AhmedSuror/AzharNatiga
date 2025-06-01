@@ -342,4 +342,4 @@ local/
 #Linux Sheel Scripts
 *.sh
 
-**/results/*.xlsx
+**/result/*.xlsx

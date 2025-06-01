@@ -1,18 +1,12 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Natiga.Models;
+using Natiga.Services;
 
 namespace Natiga.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(ILogger<HomeController> logger, ResultService resultService, IWebHostEnvironment env) : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
             return View();
@@ -21,6 +15,25 @@ namespace Natiga.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        [HttpPost("/get-result/{seatNo}")]
+        public async Task<IActionResult> GetResult(string seatNo)
+        {
+            StudentResultVM? result = default;
+
+            var xlsFilesPath = Path.Combine(env.WebRootPath, "results");
+
+            foreach (var file in Directory.GetFiles(xlsFilesPath, "*.xlsx"))
+            {
+                result = await resultService.SearchBySeatNo(seatNo.ToString(),file);
+                if (result != null)
+                {
+                    break;
+                }
+            }
+
+            return PartialView("_ResultPartial", result);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

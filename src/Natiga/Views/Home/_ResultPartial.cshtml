@@ -1,0 +1,52 @@
+﻿@model StudentResultVM
+
+
+@if (Model != null)
+{
+    <div class="border p-3">
+        <h4 class="text-danger">هذه النتيجة استرشادية فقط، ويجب الرجوع الى المعهد</h4>
+        <h5 class="mt-4">نتيجة الطالب: <span class="text-primary">@Model.Name</span> | رقم الجلوس <span class="text-warning">(@Model.SeatNo)</span></h5>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th class="fit">البيان / المادة</th>
+                    <th>الوصف / الدرجة</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var mark in Model.Marks)
+                {
+                    if (!string.IsNullOrWhiteSpace(mark.Value) && !mark.Key.Equals("النتيجة"))
+                    {
+                        <tr>
+                            <td class="fit">@mark.Key</td>
+                            <td>@mark.Value</td>
+                        </tr>
+                    }
+
+                    if (mark.Key.Equals("النتيجة"))
+                    {
+                        if (mark.Value.Equals("ناجح"))
+                        {
+                            <tr>
+                                <td class="fit">@mark.Key</td>
+                                <td class="text-success">@mark.Value</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td class="fit">@mark.Key</td>
+                                <td class="text-danger">@mark.Value</td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class='text-danger p-2'>تأكد من رقم الجلوس</div>
+}

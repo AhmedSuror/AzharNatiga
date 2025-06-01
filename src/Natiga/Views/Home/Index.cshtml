@@ -3,19 +3,19 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">نتيجة امتحان الفصل الدراسى الثانى 2024/2025</h1>
+    <h1 class="">نتيجة امتحان الفصل الدراسى الثانى 2024/2025</h1>
 </div>
 
 <form>
     <div class="row row-cols-1 mt-3">
         <div class="col">
             <div class="form-floating">
-                <input type="text" id="seat-no" name="seat-no" class="form-control" placeholder=""/>
+                <input type="number" id="seat-no" name="seat-no" class="form-control" placeholder="" style="direction: rtl" />
                 <label for="seat-no" class="control-label">أدخل رقم الجلوس</label>
             </div>
         </div>
     </div>
-    
+
     <div class="row row-cols-1 mt-3">
         <div class="col">
             <div class="form-floating">
@@ -24,3 +24,39 @@
         </div>
     </div>
 </form>
+<div class="row row-cols-1 mt-3">
+    <div class="col">
+        <div id="result" class="text-center p-3"></div>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        $('form').on('submit',
+            async function(e) {
+                e.preventDefault();
+                $('input').attr('disabled', 'disabled');
+                $('#result').html('يرجى الانتظار...');
+                const seatNo = $('#seat-no').val().trim();
+                if (seatNo === '') {
+                    $('#result').html('<span class="text-danger">يجب إدخال رقم الجلوس</span>');
+                    $('input').removeAttr('disabled');
+                    return;
+                }
+                try {
+                    const response = await fetch(`/get-result/${seatNo}`, { method: 'POST' });
+                    if (response.ok) {
+                        const data = await response.text();
+                        $('#result').html(data);
+                        console.log(data);
+                    } else {
+                        $('#result').html('<span class="text-danger">حدث خطأ أثناء محاولة عرض النتيجة، حاول مرة أخرى.</span>');
+                    }
+                } catch (e) {
+                    $('#result').html('<span class="text-danger">حدث خطأ أثناء محاولة عرض النتيجة، حاول مرة أخرى.</span>');
+                }
+
+                $('input').removeAttr('disabled');
+            });
+    </script>
+}

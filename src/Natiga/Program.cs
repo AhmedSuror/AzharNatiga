@@ -1,7 +1,14 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+var mvc = builder.Services.AddControllersWithViews();
+
+if (builder.Environment.IsDevelopment())
+{
+    mvc.AddRazorRuntimeCompilation();
+}
+
+builder.Services.AddSingleton<Natiga.Services.ResultService>();
 
 var app = builder.Build();
 

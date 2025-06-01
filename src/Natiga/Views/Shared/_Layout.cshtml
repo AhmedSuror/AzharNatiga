@@ -11,6 +11,8 @@
 
     <link href="~/lib/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+
 </head>
 <body data-bs-theme ="dark">
     <header>
@@ -40,7 +42,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted position-fixed bottom-0 w-100">
+    <footer class="border-top footer text-muted bg-dark p-2 position-fixed bottom-0 w-100">
         <div class="container text-center" dir="ltr">
             Copyrights &copy; 2025 - ahmedsuror.com
         </div>
