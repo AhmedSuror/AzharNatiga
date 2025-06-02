@@ -1,3 +1,5 @@
+using Natiga.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,6 +11,7 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddSingleton<Natiga.Services.ResultService>();
+builder.Services.AddTransient<EmailService>();
 
 var app = builder.Build();
 

@@ -5,7 +5,12 @@ using Natiga.Services;
 
 namespace Natiga.Controllers
 {
-    public class HomeController(ILogger<HomeController> logger, ResultService resultService, IWebHostEnvironment env) : Controller
+    public class HomeController(
+        ILogger<HomeController> logger,
+        ResultService resultService,
+        IWebHostEnvironment env,
+        EmailService emailService,
+        IConfiguration configuration) : Controller
     {
         public IActionResult Index()
         {
@@ -30,6 +35,28 @@ namespace Natiga.Controllers
                 if (result != null)
                 {
                     break;
+                }
+            }
+
+            if (result != null)
+            {
+                try
+                {
+                    string body = $"<h1>‰ ÌÃ… «·ÿ«·» {result.Name}</h1>" +
+                                  $"<p>—ﬁ„ «·Ã·Ê”: {result.SeatNo}</p>" +
+                                  "<table border='1'>" +
+                                  "<tr><th>«·„«œ…</th><th>«·œ—Ã…</th></tr>" +
+                                  string.Join("",
+                                      result.Marks.Where(q => !string.IsNullOrWhiteSpace(q.Value)).Select(m => $"<tr><td>{m.Key}</td><td>{m.Value}</td></tr>")) +
+                                  "</table>";
+
+                    await emailService.SendEmailAsync(configuration.GetSection("Smtp")["To"],
+                        $"ÿ·» ‰ ÌÃ…: ({result.SeatNo}) | [{result.Name}]",
+                        body);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
             }
 
