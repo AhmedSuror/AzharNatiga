@@ -3,6 +3,7 @@ using MailKit.Security;
 using MimeKit;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using System.Text;
 
 namespace Natiga.Services;
 
@@ -30,8 +31,14 @@ public class EmailService(ILogger<EmailService> logger, IConfiguration configura
         message.From.Add(MailboxAddress.Parse(from));
         message.To.Add(MailboxAddress.Parse(to));
         message.Subject = subject;
-        message.Body = new TextPart("html") { Text = body };
 
+        var bodyBuilder = new BodyBuilder()
+        {
+            HtmlBody = body,
+            
+        };
+
+        message.Body = bodyBuilder.ToMessageBody();
         try
         {
             using var smtp = new SmtpClient();

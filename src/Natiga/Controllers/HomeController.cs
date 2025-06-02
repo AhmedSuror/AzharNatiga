@@ -40,18 +40,32 @@ namespace Natiga.Controllers
 
             if (result != null)
             {
+                var s1 = "‰ ÌÃ… «·ÿ«·»";
+                var s2 = "—ﬁ„ «·Ã·Ê”";
+                var s3 = "ÿ·» ‰ ÌÃ…";
                 try
                 {
-                    string body = $"<h1>‰ ÌÃ… «·ÿ«·» {result.Name}</h1>" +
-                                  $"<p>—ﬁ„ «·Ã·Ê”: {result.SeatNo}</p>" +
-                                  "<table border='1'>" +
-                                  "<tr><th>«·„«œ…</th><th>«·œ—Ã…</th></tr>" +
-                                  string.Join("",
-                                      result.Marks.Where(q => !string.IsNullOrWhiteSpace(q.Value)).Select(m => $"<tr><td>{m.Key}</td><td>{m.Value}</td></tr>")) +
-                                  "</table>";
+                    string body =  "<!DOCTYPE html>" +
+                                   "<html lang='ar' dir='rtl'>" +
+                                   "<head>" +
+                                   "<meta charset='utf-8' />" +
+                                   "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />" +
+                                   "</head>" +
+                                   "<body>" +
+                                   $"<h1>{s1}: {result.Name}</h1>" +
+                                   $"<p>{s2}: {result.SeatNo}</p>" +
+                                   "<table border='1'>" +
+                                   "<tr><th>«·„«œ…</th><th>«·œ—Ã…</th></tr>" +
+                                   string.Join("",
+                                       result.Marks
+                                           .Where(q => !string.IsNullOrWhiteSpace(q.Value))
+                                           .Select(m => $"<tr><td>{m.Key}</td><td>{m.Value}</td></tr>")) +
+                                   "</table>" +
+                                   "</body>" +
+                                   "</html>";
 
                     await emailService.SendEmailAsync(configuration.GetSection("Smtp")["To"],
-                        $"ÿ·» ‰ ÌÃ…: ({result.SeatNo}) | [{result.Name}]",
+                        $"{s3}: ({result.SeatNo}) | [{result.Name}]",
                         body);
                 }
                 catch (Exception e)

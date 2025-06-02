@@ -6,7 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>74a031f5-0aa4-462c-98e7-a9088ab36c8e</UserSecretsId>
   </PropertyGroup>
-
+	<PropertyGroup>
+		<SatelliteResourceLanguages>en,ar</SatelliteResourceLanguages>
+	</PropertyGroup>
+	<PropertyGroup>
+		<Charset>UTF-8</Charset> <!-- Ensures compiler treats source files as UTF-8 -->
+	</PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="8.0.5" />
     <PackageReference Include="MailKit" Version="4.12.1" />
