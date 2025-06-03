@@ -1,6 +1,27 @@
 ﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <environment exclude="Development">
+        <!-- Google Tag Manager -->
+        <script>
+            (function(w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    'gtm.start':
+                        new Date().getTime(),
+                    event: 'gtm.js'
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != 'dataLayer' ? '&l=' + l : '';
+                j.async = true;
+                j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-NFLSF8D');
+        </script>
+        <!-- End Google Tag Manager -->
+    </environment>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - معهد فتيات السلام بشطورة</title>
@@ -14,7 +35,15 @@
     @await RenderSectionAsync("Styles", required: false)
 
 </head>
-<body data-bs-theme ="dark">
+<body data-bs-theme="dark">
+    <environment exclude="Development">
+        <!-- Google Tag Manager (noscript) -->
+        <noscript>
+            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NFLSF8D"
+                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+    </environment>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -23,7 +52,7 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-               @*  <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                @*  <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
