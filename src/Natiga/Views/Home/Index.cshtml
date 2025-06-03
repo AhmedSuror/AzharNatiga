@@ -49,6 +49,8 @@
                         const data = await response.text();
                         $('#result').html(data);
                         console.log(data);
+                    } else if (response.status === 400) {
+                        $('#result').html('<span class="text-danger">لقد تخطيت عدد المحاولات المسموحة للاستعلام عن النتيجة، يرجى المحاولة بعد ساعة</span>');
                     } else {
                         $('#result').html('<span class="text-danger">حدث خطأ أثناء محاولة عرض النتيجة، حاول مرة أخرى.</span>');
                     }
